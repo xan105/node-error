@@ -24,12 +24,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xan105/node-log.git"
+    "url": "git+https://github.com/xan105/node-error.git"
   },
   "bugs": {
-    "url": "https://github.com/xan105/node-log/issues"
+    "url": "https://github.com/xan105/node-error/issues"
   },
-  "homepage": "https://github.com/xan105/node-log#readme",
+  "homepage": "https://github.com/xan105/node-error#readme",
   "devDependencies": {
     "eslint": "^8.5.0"
   }
