@@ -33,7 +33,7 @@ API
 
 ## Named export
 
-### `(message: string, code?: string | number | null): class`
+### `Failure(message: string, code?: string | number | null): class`
 
 Create an error with an optional custom code.<br />
 This extends the regular `Error` constructor.
