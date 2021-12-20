@@ -1,0 +1,36 @@
+{
+  "name": "@xan105/error",
+  "version": "1.0.0",
+  "description": "A very simple error wrapper",
+  "type": "module",
+  "exports": "./lib/esm.js",
+  "types": "./types/esm.d.ts",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "lint": "npx eslint --ignore-path .gitignore ./**/*.{js,mjs}"
+  },
+  "keywords": [
+    "error",
+    "fail",
+    "failure"
+  ],
+  "author": {
+    "name": "Anthony Beaumont",
+    "email": "dev.xan105@outlook.be",
+    "url": "https://xan105.com/"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xan105/node-log.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xan105/node-log/issues"
+  },
+  "homepage": "https://github.com/xan105/node-log#readme",
+  "devDependencies": {
+    "eslint": "^8.5.0"
+  }
+}
