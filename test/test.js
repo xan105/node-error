@@ -1,12 +1,33 @@
-import { Failure } from "../lib/esm.js";
+import { Failure } from "../lib/index.js";
 
-try{ throw new Failure("message", "err_code") }catch(err){ console.error(err) }
-try{ throw new Failure("message", 1) }catch(err){ console.error(err) }
-try{ throw new Failure("message") }catch(err){ console.error(err) }
+try{
+  throw new Failure("parent message", "ERR_CODE_PARENT");
+}catch(err){
+  test(new Failure("message0", { code: "ERR_CODE", info: {foo: "bar", bar: "foo"}, cause: err }));
+  test(new Failure("message1", { code: "ERR_CODE", info: {foo: "bar", bar: "foo"}, cause: err, show: true }));
+}
+test(new Failure("message2", { code: "ERR_CODE", info: ["a","b","c","d"] })); 
+test(new Failure("message3", "ERR_CODE"));
+test(new Failure("message4", 1));
+test(new Failure("message5"));
 
-try{ throw new Failure("message", 99) }catch(err){ console.error(err) }
-try{ throw new Failure("message", "") }catch(err){ console.error(err) }
+test(new Failure("message6", 99));
+test(new Failure("message7", ""));
+test(new Failure("message8", { info: "string"}));
+test(new Failure("message9", { cause: "parent message" }));
+try{
+  throw new Failure("");
+}catch(err){
+  test(new Failure("message10", { cause: err }));
+}
 
-try{ throw new Failure("") }catch(err){ console.error(err) }
-try{ throw new Failure() }catch(err){ console.error(err) }
+test(new Failure(""));
+test(new Failure());
 
+function test(error){
+  try {
+    throw error
+  } catch(err){ 
+    console.error(err) 
+  }
+}
