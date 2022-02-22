@@ -1,12 +1,17 @@
+About
+=====
+
 A very simple error wrapper.
 
 Install
--------
+=======
 
-`npm install @xan105/error`
+```
+npm install @xan105/error
+```
 
 Usage example
--------------
+=============
 
 ```js
 import { Failure } from "@xan105/error";
