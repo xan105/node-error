@@ -6,7 +6,7 @@ try{
   test(new Failure("message0", { code: "ERR_CODE", info: {foo: "bar", bar: "foo"}, cause: err }));
   test(new Failure("message1", { code: "ERR_CODE", info: {foo: "bar", bar: "foo"}, cause: err, show: true }));
 }
-test(new Failure("message2", { code: "ERR_CODE", info: ["a","b","c","d"] })); 
+test(new Failure("message2", { code: "ERR_CODE", filter: ["foo", "bar"], info: ["a","b","c","d"] })); 
 test(new Failure("message3", "ERR_CODE"));
 test(new Failure("message4", 1));
 test(new Failure("message5"));
