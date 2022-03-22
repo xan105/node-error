@@ -24,6 +24,8 @@ try{
 test(new Failure(""));
 test(new Failure());
 
+test(new Failure(undefined, "ERR_NO_MSG"));
+
 function test(error){
   try {
     throw error
