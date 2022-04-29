@@ -47,7 +47,6 @@ This extends the regular `Error` constructor.
 |------|-------|-----------|
 |code|none|optional custom error code (see below for details)|
 |cause|none|parent error if any|
-|show|false|whether to show the entire parent error(true) or just its message (if any)|
 |clean|true|remove unhelpful internal stack trace entries|
 |filter|none|additional string[] of path(s) to filter when using clean| 
 |info|none|an additional object/array to give more details about the error|
