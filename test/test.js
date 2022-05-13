@@ -25,10 +25,17 @@ test(new Failure());
 
 test(new Failure(undefined, "ERR_NO_MSG"));
 
-function test(error){
+//compare
+test(new Failure("default failure", {clean: false}));
+test(new Error("default error"));
+
+//stringify
+test(new Failure("error stringify"), true);
+
+function test(error, stringify = false){
   try {
     throw error
   } catch(err){ 
-    console.error(err) 
+    stringify ? console.error(`${err}`) : console.error(err);
   }
 }

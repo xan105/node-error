@@ -3,7 +3,7 @@ declare interface IOption {
   cause?: object | null,
   clean?: boolean,
   filter?: string[],
-  info?: object | null
+  info?: object | string | null
 }
 
 declare class Failure {

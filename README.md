@@ -49,7 +49,7 @@ This extends the regular `Error` constructor.
 |cause|none|parent error if any|
 |clean|true|remove unhelpful internal stack trace entries|
 |filter|none|additional string[] of path(s) to filter when using clean| 
-|info|none|an additional object/array to give more details about the error|
+|info|none|an additional object/array/string to give more details about the error|
 
 `code` (if any) is expected to be a string if it's an integer then the following will be used instead:
 
