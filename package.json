@@ -1,7 +1,7 @@
 {
   "name": "@xan105/error",
   "version": "1.2.0",
-  "description": "A very simple error wrapper",
+  "description": "A very simple error wrapper extending the Error constructor",
   "type": "module",
   "exports": "./lib/index.js",
   "types": "./types/index.d.ts",
@@ -31,6 +31,6 @@
   },
   "homepage": "https://github.com/xan105/node-error#readme",
   "devDependencies": {
-    "eslint": "^8.9.0"
+    "eslint": "^8.15.0"
   }
 }
