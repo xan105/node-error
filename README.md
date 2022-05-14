@@ -98,7 +98,7 @@ Failure: Expecting a string !
     at async Promise.all (index 0)
 ```
 
-### `const linuxErrCodes: object`
+### `linuxErrCodes: object`
 
 A list of standard Linux error codes _(1-131)_ with their description as follows:
 
@@ -136,7 +136,7 @@ Failure [EPERM]: Operation not permitted
 }
 ```
 
-### `const windowsErrCodes: object`
+### `windowsErrCodes: object`
 
 A list of standard Windows error codes _(1-15841)_ with their description as follows:
 
