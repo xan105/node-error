@@ -173,3 +173,43 @@ Failure [ERROR_INVALID_FUNCTION]: Incorrect function
   info: { foo: 'bar' }
 }
 ```
+
+### `windowsErrCodesHRESULT: object`
+
+Like `windowsErrCodes` but with `HRESULT`.<br/>
+HRESULT error codes are most commonly encountered in COM programming.<br/>
+Includes common and WMI error codes with their description as follows:<br/>
+
+```js
+{
+  2147500036: ["Operation aborted", "E_ABORT"],
+  2147500037: ["Unspecified failure", "E_FAIL"],
+  2147549183: ["Unexpected failure", "E_UNEXPECTED"],
+  ...
+}
+```
+
+Usage example with error `2147749921 (0x80041021)`:
+
+`throw new Failure(....windowsErrCodesHRESULT(new Uint32Array([-2147217375])[0]) //cast signed to unsigned);`      
+
+```
+Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
+    StackTrace...
+    .............
+    ............. {
+  code: 'WBEM_E_INVALID_SYNTAX'
+}
+```
+
+`throw new Failure(windowsErrCodes[2147749921][0], { code: windowsErrCodes[2147749921][1], info: { foo: "bar" } });`
+
+```
+Failure [WBEM_E_INVALID_SYNTAX]: Incorrect function
+    StackTrace...
+    .............
+    ............. {
+  code: 'WBEM_E_INVALID_SYNTAX',
+  info: { foo: 'bar' }
+}
+```

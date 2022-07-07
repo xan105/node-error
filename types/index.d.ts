@@ -13,3 +13,4 @@ declare class Failure {
 export { Failure };
 export const linuxErrCodes: object;
 export const windowsErrCodes: object;
+export const windowsErrCodesHRESULT: object;
