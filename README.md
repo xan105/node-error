@@ -177,8 +177,8 @@ Failure [ERROR_INVALID_FUNCTION]: Incorrect function
 ### `windowsErrCodesHRESULT: object`
 
 Like `windowsErrCodes` but with `HRESULT`.<br/>
-HRESULT error codes are most commonly encountered in COM programming.<br/>
-Includes common and WMI error codes with their description as follows:<br/>
+_HRESULT error codes_ are most commonly encountered in COM programming.<br/>
+Includes common and WMI error codes with their description as follows:
 
 ```js
 {
@@ -191,7 +191,10 @@ Includes common and WMI error codes with their description as follows:<br/>
 
 Usage example with error `2147749921 (0x80041021)`:
 
-`throw new Failure(....windowsErrCodesHRESULT(new Uint32Array([-2147217375])[0]) //cast signed to unsigned);`      
+```js
+const code = new Uint32Array([-2147217375])[0]; //cast signed to unsigned
+throw new Failure(...windowsErrCodesHRESULT[code]);
+```      
 
 ```
 Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
@@ -202,7 +205,12 @@ Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
 }
 ```
 
-`throw new Failure(windowsErrCodes[2147749921][0], { code: windowsErrCodes[2147749921][1], info: { foo: "bar" } });`
+```js
+throw new Failure(windowsErrCodes[2147749921][0], { 
+  code: windowsErrCodes[2147749921][1], 
+  info: { foo: "bar" } 
+});
+```
 
 ```
 Failure [WBEM_E_INVALID_SYNTAX]: Incorrect function
