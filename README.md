@@ -221,3 +221,27 @@ Failure [WBEM_E_INVALID_SYNTAX]: Incorrect function
   info: { foo: 'bar' }
 }
 ```
+
+### `errorLookup(code: number | string, os?: string = node:os.platform()): string[]`
+
+Retrieve information about an error by its numerical status code (or other code).
+
+Return an array of string as [message, code].
+
+You can use it directly with `Failure`:
+
+```js
+new Failure(...errorLookup(0x80041021));
+new Failure(...errorLookup(2147749921));
+new Failure(...errorLookup(-2147217375));
+new Failure(...errorLookup("WBEM_E_INVALID_SYNTAX"));
+```
+
+```
+Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
+    StackTrace...
+    .............
+    ............. {
+  code: 'WBEM_E_INVALID_SYNTAX'
+}
+```

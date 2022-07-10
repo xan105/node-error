@@ -11,6 +11,7 @@ declare class Failure {
 }
 
 export { Failure };
+export function errorLookup(code: number | string, os?: string): string[];
 export const linuxErrCodes: object;
 export const windowsErrCodes: object;
 export const windowsErrCodesHRESULT: object;
