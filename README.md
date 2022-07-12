@@ -56,6 +56,7 @@ This extends the regular `Error` constructor.
  0. ERR_UNEXPECTED
  1. ERR_INVALID_ARG
  2. ERR_ASSERTION
+ 3. ERR_UNSUPPORTED
   
 if `option` is either a string or a number then it specifies the error code.
  
