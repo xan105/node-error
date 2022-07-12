@@ -7,7 +7,7 @@ declare interface IOption {
 }
 
 declare class Failure {
-  constructor(message: string, option?: string | number | IOption);
+  constructor(message: string | object, option?: string | number | IOption);
 }
 
 export { Failure };

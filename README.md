@@ -38,7 +38,7 @@ API
 
 ## Named export
 
-### `Failure(message: string, option?: string | number | object): class`
+### `Failure(message: string | object, option?: string | number | object): class`
 
 Create an error with optional information.<br />
 This extends the regular `Error` constructor.
@@ -222,7 +222,7 @@ Failure [WBEM_E_INVALID_SYNTAX]: Incorrect function
 }
 ```
 
-### `errorLookup(code: number | string, os?: string = node:os.platform()): string[]`
+### `errorLookup(code: number | string, os?: string = os.platform()): string[]`
 
 Retrieve information about an error by its numerical status code (or other code).
 
