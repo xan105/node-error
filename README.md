@@ -246,3 +246,45 @@ Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
   code: 'WBEM_E_INVALID_SYNTAX'
 }
 ```
+
+### `attempt(fn: unknown, args?: any[]):unknown | Promise<unknown>`
+
+This is a try/catch wrapper to change how an error is handled.
+Instead of throwing the error is returned as a value similar to GoLang.
+
+Parameters:
+  
+  - fn: The function or promise to execute.
+  
+  If `fn` is a promise then this function will behave like one.
+  eg:
+```js
+//Promise
+const file = await attempt(fs.Promises.readFile, [filePath]);
+//Sync
+const json = attempt(JSON.parse, [file]);
+```
+  
+  - args:?any[] Array Optional list of arguments to pass to the given function/promise 
+
+  
+Return value:
+  
+  ✔️ Whether the given `fn` function/promise succeeds or fails.
+  This function will return the result and the error together as 
+  `[result: any || undefined, error: Object || undefined]`.
+
+  ❌ This function will throw if `fn` isn't a function or a promise
+ 
+Example
+
+```js
+import { readFile } from "node:fs/promises";
+  
+//read the file
+const [ file, err ] = await attempt(readFile, [filePath]);
+if(err) //in case of error do something;
+
+//ignore error and set a default value
+const [ json = {} ] = attempt(JSON.parse, [file]);
+```
