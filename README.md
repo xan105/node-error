@@ -289,10 +289,13 @@ Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
 }
 ```
 
-### `attempt(fn: unknown, args?: any[]):[unknown, Error | undefined] | Promise<>`
+### `attempt(fn: unknown, args?: any[]):[unknown, Error | undefined] | Promise<[unknown, Error | undefined]>`
 
 This is a try/catch wrapper to change how an error is handled.<br />
 Instead of throwing returns an error as a value similar to GoLang.
+
+By leveraging the destructure syntax we can easily provide a default value in case of error and/or choose to completely ignore to handle any error.<br />
+And if we want to handle any error we can do so like we would with any value.
 
 Parameters:
   
@@ -302,9 +305,9 @@ Parameters:
   eg:
 ```js
 //Promise
-const file = await attempt(fs.Promises.readFile, [filePath]);
+const [ file ] = await attempt(fs.Promises.readFile, [filePath]);
 //Sync
-const json = attempt(JSON.parse, [file]);
+const [ json ] = attempt(JSON.parse, [file]);
 ```
   
   - args: Optional list of arguments to pass to fn
@@ -314,6 +317,8 @@ Return value:
   Returns the result and the error together as an array as `[result, error]`.<br />
   If there is an error result will be undefined.<br />
   Otherwise error will be undefined.
+  
+  💡 undefined is used to represent the lack/nonexistence of value because destructuring default value assignment triggers only with undefined.
  
 Example
 
