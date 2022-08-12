@@ -247,14 +247,14 @@ Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
 }
 ```
 
-### `attempt(fn: unknown, args?: any[]):unknown | Promise<unknown>`
+### `attempt(fn: unknown, args?: any[]):[] | Promise<[]>`
 
 This is a try/catch wrapper to change how an error is handled.
-Instead of throwing the error is returned as a value similar to GoLang.
+Instead of throwing returns an error as a value similar to GoLang.
 
 Parameters:
   
-  - fn: The function or promise to execute.
+  - fn: The value to resolve
   
   If `fn` is a promise then this function will behave like one.
   eg:
@@ -265,16 +265,11 @@ const file = await attempt(fs.Promises.readFile, [filePath]);
 const json = attempt(JSON.parse, [file]);
 ```
   
-  - args:?any[] Array Optional list of arguments to pass to the given function/promise 
+  - args: Optional list of arguments to pass to fn
 
-  
 Return value:
   
-  ✔️ Whether the given `fn` function/promise succeeds or fails.
-  This function will return the result and the error together as 
-  `[result: any || undefined, error: Object || undefined]`.
-
-  ❌ This function will throw if `fn` isn't a function or a promise
+  Returns the result and the error together as `[result: unknown, error: Error | undefined]`.
  
 Example
 
@@ -287,4 +282,27 @@ if(err) //in case of error do something;
 
 //ignore error and set a default value
 const [ json = {} ] = attempt(JSON.parse, [file]);
+```
+
+NB: Note that when using Promise static methods such as `.all()`, `.any()`, `.allSettled()` , etc.
+You need to `bind` them to the `Promise` constructor otherwise they will loose their `this` context and fail.
+
+```js
+const promise1 = new Promise((resolve) => setTimeout(resolve, 100, 'quick'));
+const promise2 = new Promise((resolve) => setTimeout(resolve, 500, 'slow'));
+const promises = [promise1, promise2];
+
+//This will fail with a TypeError
+const [ result, error ] = await attempt(Promise.any, [promises]);
+/*
+[
+  undefined,
+  TypeError: Promise.any called on non-object
+      at any (<anonymous>)
+      StackTrace...
+]
+*/
+
+//This will not
+const [ result, error ] = await attempt(Promise.any.bind(Promise), [promises]);
 ```
