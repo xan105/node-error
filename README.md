@@ -1,7 +1,12 @@
 About
 =====
 
-A very simple error wrapper extending the `Error` constructor.
+Error handling tools:
+
+- Custom Error type `Failure` extending the `Error` constructor
+- Linux/Windows standard error codes and their description
+- Error lookup: retrieve description associated to status code (or other code)
+- GoLang style error handling: return value instead of throwing
 
 Install
 =======
@@ -9,6 +14,8 @@ Install
 ```
 npm install @xan105/error
 ```
+
+📦 Scoped `@xan105` packages are for my own personal use but feel free to use them.
 
 Usage example
 =============
@@ -28,6 +35,41 @@ Failure [ERR_CODE]: my super error message
     .............
     ............. {
   code: 'ERR_CODE'
+}
+```
+
+- GoLang style error
+
+```js
+import { attempt } from "@xan105/error";
+import { readFile } from "node:fs/promises";
+
+const [ file, err ] = await attempt(readFile, [filePath]);
+if(err) console.error(err); //handle error
+//ignore error and set a default value
+const [ json = {} ] = attempt(JSON.parse, [file]);
+```
+
+- Windows error lookup with shell32 API (FFI)
+
+```js
+import { Failure, errorLookup } from "@xan105/error";
+
+// ... Some FFI implementation code
+
+const hr = SHQueryUserNotificationState(pquns);
+if (hr < 0) throw new Failure(...errorLookup(hr));
+```
+
+Let's say this would fail with error `0x8000FFFF`
+
+Output:
+```
+Failure [E_UNEXPECTED]: Catastrophic failure
+StackTrace...
+    .............
+    ............. {
+  code: 'E_UNEXPECTED'
 }
 ```
 
@@ -247,9 +289,9 @@ Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
 }
 ```
 
-### `attempt(fn: unknown, args?: any[]):[] | Promise<[]>`
+### `attempt(fn: unknown, args?: any[]):[unknown, Error | undefined] | Promise<>`
 
-This is a try/catch wrapper to change how an error is handled.
+This is a try/catch wrapper to change how an error is handled.<br />
 Instead of throwing returns an error as a value similar to GoLang.
 
 Parameters:
@@ -269,7 +311,9 @@ const json = attempt(JSON.parse, [file]);
 
 Return value:
   
-  Returns the result and the error together as `[result: unknown, error: Error | undefined]`.
+  Returns the result and the error together as an array as `[result, error]`.<br />
+  If there is an error result will be undefined.<br />
+  Otherwise error will be undefined.
  
 Example
 
@@ -284,7 +328,7 @@ if(err) //in case of error do something;
 const [ json = {} ] = attempt(JSON.parse, [file]);
 ```
 
-NB: Note that when using Promise static methods such as `.all()`, `.any()`, `.allSettled()` , etc.
+NB: Note that when using Promise static methods such as `.all()`, `.any()`, `.allSettled()` , etc.<br />
 You need to `bind` them to the `Promise` constructor otherwise they will loose their `this` context and fail.
 
 ```js
