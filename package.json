@@ -1,7 +1,7 @@
 {
   "name": "@xan105/error",
   "version": "1.4.0",
-  "description": "A very simple error wrapper extending the Error constructor",
+  "description": "Error handling tools",
   "type": "module",
   "exports": {
     ".": {
@@ -14,7 +14,8 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "lint": "npx eslint --ignore-path .gitignore \"./**/*.{js,mjs,d.ts}\""
+    "lint": "npx eslint --ignore-path .gitignore \"./**/*.{js,mjs,d.ts}\"",
+    "test": "tap \"test/*\" --no-coverage --no-coverage-report"
   },
   "keywords": [
     "error",
@@ -35,9 +36,24 @@
     "url": "https://github.com/xan105/node-error/issues"
   },
   "homepage": "https://github.com/xan105/node-error#readme",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/xan105"
+    },
+    {
+      "type": "paypal",
+      "url": "https://www.paypal.me/xan105"
+    },
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/xan105"
+    }
+  ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
-    "eslint": "^8.19.0"
+    "eslint": "^8.19.0",
+    "tap": "^16.3.0"
   }
 }
