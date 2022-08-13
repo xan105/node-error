@@ -14,7 +14,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "lint": "npx eslint --ignore-path .gitignore \"./**/*.{js,mjs,d.ts}\"",
+    "lint": "npx eslint \"./lib/**.{js,mjs}\" \"./types/**.d.ts\"",
     "test": "tap \"test/*\" --no-coverage --no-coverage-report"
   },
   "keywords": [
