@@ -116,10 +116,13 @@ t.end();
 
 t.test("fn as an anonymous function", t => {
   t.test("> success", t => {
-    const [ result, error ] = attempt( ()=> "value" );
+    let res = attempt( ()=> "value" );
+    t.equal(res[0], "value");
+    t.equal(res[1], undefined);
     
-    t.equal(result, "value");
-    t.equal(error, undefined);
+    res = attempt( (x)=> x, ["value"] );
+    t.equal(res[0], "value");
+    t.equal(res[1], undefined);
 
   t.end();
   });
@@ -176,6 +179,19 @@ t.test("Examples:", async t => {
     const [ json = {} ] = attempt(JSON.parse, [string]);
     
     t.strictSame(json, {});
+
+  t.end();
+  });
+  t.test("JSON parsing wrap in anonymous function", t => {
+    
+    const string = `{"name":"John","age":30,"city":"New York"}`;
+    const [ json ] = attempt(()=> JSON.parse(string) );
+    
+    t.strictSame(json, {name:"John", age:30, city:"New York"});
+    
+    const [ json2string ] = attempt(()=> JSON.stringify(JSON.parse(string)) );
+    
+    t.strictSame(string, json2string);
 
   t.end();
   });

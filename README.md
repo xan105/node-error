@@ -309,6 +309,15 @@ const [ file ] = await attempt(fs.Promises.readFile, [filePath]);
 //Sync
 const [ json ] = attempt(JSON.parse, [file]);
 ```
+
+  You can also use anonymous function (or wrap in one).
+  eg:
+```js
+const [result] = attempt( ()=> "value" );
+const [result] = attempt( (x)=> x, ["value"] );
+const [json] = attempt(()=> JSON.parse(string) );
+const [json] = attempt(()=> JSON.stringify(JSON.parse(string)) );
+```
   
   - args: Optional list of arguments to pass to fn
 
