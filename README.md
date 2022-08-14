@@ -297,6 +297,59 @@ Instead of throwing returns an error as a value similar to GoLang.
 By leveraging the destructure syntax we can easily provide a default value in case of error and/or choose to completely ignore to handle any error.<br />
 And if we want to handle any error we can do so like we would with any value.
 
+Example
+
+```js
+import { readFile } from "node:fs/promises";
+  
+//read the file
+const [ file, err ] = await attempt(readFile, [filePath]);
+if(err) //in case of error do something;
+
+//ignore error and set a default value
+const [ json = {} ] = attempt(JSON.parse, [file]);
+```
+
+This doesn't replace try/catch it's an alternative.<br />
+It is particularly useful to avoid these patterns:
+
+- Using `let` instead of `const` because the variable needs to be outside of the try/catch scope.
+
+```js
+
+//Instead of
+let json;
+try{
+  json = JSON.parse(string);
+} catch { /*do nothing*/ }
+return json; //do something
+
+//You could do
+const [ json ] = attempt(JSON.parse,[string]);
+return json; //do something
+```
+
+- Nested try/catch which are sometimes unavoidable and impact readability.
+
+```js
+//Instead of
+try{
+  foo();
+}catch(err){
+  try{
+    bar();
+  }catch(err){
+    if (err.code === "ENOENT")
+      throw new Error("It didn't work");
+  }
+}
+
+//You could do
+if (attempt(foo)[1] && attempt(bar)[1]?.code === "ENOENT"){
+  throw new Error("It didn't work");    
+}
+```
+
 Parameters:
   
   - fn: The value to resolve
@@ -328,19 +381,6 @@ Return value:
   Otherwise error will be undefined.
   
   💡 undefined is used to represent the lack/nonexistence of value because destructuring default value assignment triggers only with undefined.
- 
-Example
-
-```js
-import { readFile } from "node:fs/promises";
-  
-//read the file
-const [ file, err ] = await attempt(readFile, [filePath]);
-if(err) //in case of error do something;
-
-//ignore error and set a default value
-const [ json = {} ] = attempt(JSON.parse, [file]);
-```
 
 NB: Note that when using Promise static methods such as `.all()`, `.any()`, `.allSettled()` , etc.<br />
 You need to `bind` them to the `Promise` constructor otherwise they will loose their `this` context and fail.
@@ -349,6 +389,9 @@ You need to `bind` them to the `Promise` constructor otherwise they will loose t
 const promise1 = new Promise((resolve) => setTimeout(resolve, 100, 'quick'));
 const promise2 = new Promise((resolve) => setTimeout(resolve, 500, 'slow'));
 const promises = [promise1, promise2];
+
+//This will succeed
+const [ result, error ] = await attempt(()=> Promise.any(promises));
 
 //This will fail with a TypeError
 const [ result, error ] = await attempt(Promise.any, [promises]);
@@ -361,6 +404,6 @@ const [ result, error ] = await attempt(Promise.any, [promises]);
 ]
 */
 
-//This will not
+//This will succeed
 const [ result, error ] = await attempt(Promise.any.bind(Promise), [promises]);
 ```
