@@ -5,10 +5,10 @@ t.test("Error lookup", t => {
 
   const err = ["Query is syntactically not valid", "WBEM_E_INVALID_SYNTAX"];
 
-  t.same(errorLookup(0x80041021), err);
-  t.same(errorLookup(2147749921), err);
-  t.same(errorLookup(-2147217375), err);
-  t.same(errorLookup("WBEM_E_INVALID_SYNTAX"), err);
+  t.same(errorLookup(0x80041021, "win32"), err);
+  t.same(errorLookup(2147749921, "win32"), err);
+  t.same(errorLookup(-2147217375, "win32"), err);
+  t.same(errorLookup("WBEM_E_INVALID_SYNTAX", "win32"), err);
   
   t.test("Unknown error code", t => {
 
