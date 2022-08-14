@@ -166,10 +166,14 @@ t.test("Examples:", async t => {
     const promise2 = new Promise((resolve) => setTimeout(resolve, 100, "quick"));
     const promise3 = new Promise((resolve) => setTimeout(resolve, 500, "slow"));
     const promises = [promise1, promise2, promise3];
-    const [ result, error ] = await attempt(Promise.any.bind(Promise), [promises]);
-      
-    t.equal(result, "quick");
-    t.equal(error, undefined);
+    
+    let res = await attempt(Promise.any.bind(Promise), [promises]);
+    t.equal(res[0], "quick");
+    t.equal(res[1], undefined);
+    
+    res = await attempt(()=> Promise.any(promises));
+    t.equal(res[0], "quick");
+    t.equal(res[1], undefined);    
 
   t.end();
   });
