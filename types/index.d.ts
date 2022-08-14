@@ -12,7 +12,7 @@ declare class Failure {
 
 export { Failure };
 export function errorLookup(code: number | string, os?: string): string[];
-export function attempt(fn: unknown, args?: any[]):[unknown, Error | undefined] | Promise<[unknown, Error | undefined]>;
+export function attempt(fn: unknown, args?: unknown[]):Promise<unknown[]> | unknown[];
 
 //Operating System Error Codes
 export const linuxErrCodes: object;

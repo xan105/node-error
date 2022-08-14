@@ -289,7 +289,7 @@ Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
 }
 ```
 
-### `attempt(fn: unknown, args?: any[]):[unknown, Error | undefined] | Promise<[unknown, Error | undefined]>`
+### `attempt(fn: unknown, args?: unknown[]):Promise<unknown[]> | unknown[]`
 
 This is a try/catch wrapper to change how an error is handled.<br />
 Instead of throwing returns an error as a value similar to GoLang.
@@ -377,10 +377,10 @@ const [json] = attempt(()=> JSON.stringify(JSON.parse(string)) );
 **Return value:**
   
   Returns the result and the error together as an array as `[result, error]`.<br />
-  If there is an error result will be undefined.<br />
-  Otherwise error will be undefined.
+  If there is an error result will be _undefined_.<br />
+  Otherwise error will be _undefined_.
   
-  💡 undefined is used to represent the lack/nonexistence of value because destructuring default value assignment triggers only with undefined.
+  💡 _undefined_ is used to represent the lack/nonexistence of value because destructuring default value assignment triggers only with _undefined_.
 
 NB: Note that when using Promise static methods such as `.all()`, `.any()`, `.allSettled()` , etc.<br />
 You need to `bind` them to the `Promise` constructor otherwise they will loose their `this` context and fail.
