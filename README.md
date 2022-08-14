@@ -350,7 +350,7 @@ if (attempt(foo)[1] && attempt(bar)[1]?.code === "ENOENT"){
 }
 ```
 
-Parameters:
+**Parameters:**
   
   - fn: The value to resolve
   
@@ -374,7 +374,7 @@ const [json] = attempt(()=> JSON.stringify(JSON.parse(string)) );
   
   - args: Optional list of arguments to pass to fn
 
-Return value:
+**Return value:**
   
   Returns the result and the error together as an array as `[result, error]`.<br />
   If there is an error result will be undefined.<br />
