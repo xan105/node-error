@@ -14,8 +14,8 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "lint": "npx eslint \"./lib/**.{js,mjs}\" \"./types/**.d.ts\"",
-    "test": "tap \"test/*\" --no-coverage --no-coverage-report"
+    "lint": "npx eslint \"./lib/**/*.{js,mjs}\" \"./types/**/*.d.ts\"",
+    "test": "tap \"test/**/*.js\" --no-coverage --no-coverage-report"
   },
   "keywords": [
     "error",
