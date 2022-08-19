@@ -48,6 +48,8 @@ const [ file, err ] = await attempt(readFile, [filePath]);
 if(err) console.error(err); //handle error
 //ignore error and set a default value
 const [ json = {} ] = attempt(JSON.parse, [file]);
+//skip value
+const [, err] = attempt(foo, ["bar"]);
 ```
 
 - Windows error lookup with shell32 API (FFI)
@@ -308,6 +310,9 @@ if(err) //in case of error do something;
 
 //ignore error and set a default value
 const [ json = {} ] = attempt(JSON.parse, [file]);
+
+//skip value
+const [, err] = attempt(foo, ["bar"]);
 ```
 
 This doesn't replace try/catch it's an alternative.<br />

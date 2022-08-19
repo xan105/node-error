@@ -199,6 +199,15 @@ t.test("Examples:", async t => {
 
   t.end();
   });
+  
+  t.test("skipping value", t => {
+    
+    const [, error] = attempt(()=> { throw new Error("error") });
+    t.ok(error instanceof Error);
+    t.same(error, new Error("error"));
+  
+  t.end();
+  });
 t.end();
 });
 
