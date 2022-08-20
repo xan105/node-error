@@ -387,8 +387,16 @@ const [json] = attempt(()=> JSON.stringify(JSON.parse(string)) );
   
   💡 _undefined_ is used to represent the lack/nonexistence of value because destructuring default value assignment triggers only with _undefined_.
 
-NB: Note that when using Promise static methods such as `.all()`, `.any()`, `.allSettled()` , etc.<br />
-You need to `bind` them to the `Promise` constructor otherwise they will loose their `this` context and fail.
+⚠️ NB: If you get an error like:
+```
+TypeError: x called on non-object
+TypeError: Illegal invocation
+```
+
+This is most likely because what you are invoking lost its `this` context.
+You need to `bind` it to its constructor or use an arrow function.
+
+`Promise` static methods such as `.all()`, `.any()`, `.allSettled()` , etc is a good example of this:
 
 ```js
 const promise1 = new Promise((resolve) => setTimeout(resolve, 100, 'quick'));
