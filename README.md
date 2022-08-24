@@ -420,3 +420,14 @@ const [ result, error ] = await attempt(Promise.any, [promises]);
 //This will succeed
 const [ result, error ] = await attempt(Promise.any.bind(Promise), [promises]);
 ```
+
+node:util/promisify:
+
+```js
+import { promisify } from "node:util";
+import { execFile } from "node:child_process";
+
+const [ ps, err ] = await attempt(promisify(execFile), [pwsh, ["-NoProfile", "-NoLogo"], { windowsHide: true }]);
+if (err || ps.stderr) throw new Failure(err?.stderr || ps.stderr, "ERR_POWERSHELL");
+return ps;
+```
