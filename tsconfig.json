@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "typeRoots" : ["./types"],
-    "module": "es6"
-  }
+    "typeRoots" : ["./types", "node_modules/@types"],
+    "module": "node16"
+  },
+  "exclude":[
+    "node_modules",
+    "test"
+  ]
 }

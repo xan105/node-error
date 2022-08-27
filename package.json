@@ -16,7 +16,8 @@
   "scripts": {
     "lint": "npx eslint \"./lib/**/*.{js,mjs}\" \"./types/**/*.d.ts\"",
     "test": "tap \"./test/**/*.js\" --no-coverage --no-coverage-report",
-    "ts": "ts-node --esm \"./test/hello.ts\""
+    "ts": "ts-node --esm \"./test/hello.ts\"",
+    "check": "tsc --noemit --allowjs --checkjs"
   },
   "keywords": [
     "error",
@@ -52,6 +53,7 @@
     }
   ],
   "devDependencies": {
+    "@types/node": "^18.7.13",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "^8.22.0",
