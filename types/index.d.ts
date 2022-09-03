@@ -1,20 +1,6 @@
-declare interface IOption {
-  code?: string | number | null,
-  cause?: object | null,
-  clean?: boolean,
-  filter?: string[],
-  info?: object | string | null
-}
-
-declare class Failure {
-  constructor(message: string | object, option?: string | number | IOption);
-}
-
-export { Failure };
-export function errorLookup(code: number | string, os?: string): string[];
-export function attempt(fn: unknown, args?: unknown[]):Promise<unknown[]> | unknown[];
-
-//Operating System Error Codes
-export const linuxErrCodes: object;
-export const windowsErrCodes: object;
-export const windowsErrCodesHRESULT: object;
+export { Failure } from "./failure.js";
+export { errorLookup } from "./lookup.js";
+export { attempt } from "./attempt.js";
+export { linuxErrCodes } from "./codes/linux.js";
+export { windowsErrCodes } from "./codes/windows/windows.js";
+export { windowsErrCodesHRESULT } from "./codes/windows/hresult.js";
