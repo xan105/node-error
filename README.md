@@ -78,8 +78,10 @@ npm install @xan105/error
 ```
 
 <details><summary>Compatibility</summary>
+
 - Node ✔️
 - Deno ✔️ `--compat --unstable`
+
 </details>
 
 ### 🌐 CDN / HTTPS Bundle
@@ -91,9 +93,11 @@ import ... from "https://esm.sh/@xan105/error"
 Please see https://esm.sh/ for more details.
 
 <details><summary>Compatibility</summary>
+
 - Node ✔️ `--experimental-network-imports`
 - Deno ✔️
 - Browser ✔️
+
 </details>
 
 API
