@@ -1,12 +1,16 @@
 {
   "name": "@xan105/error",
   "description": "Error handling tools",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "type": "module",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
       "default": "./lib/index.js"
+    },
+    "./codes": {
+      "types": "./types/codes.d.ts",
+      "default": "./lib/codes.js"
     }
   },
   "types": "./types/index.d.ts",
@@ -53,11 +57,11 @@
     }
   ],
   "devDependencies": {
-    "@types/node": "^18.7.13",
-    "@typescript-eslint/eslint-plugin": "^5.33.0",
-    "@typescript-eslint/parser": "^5.33.0",
-    "eslint": "^8.22.0",
-    "tap": "^16.3.0",
-    "typescript": "^4.7.4"
+    "@types/node": "^18.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
+    "eslint": "^8.34.0",
+    "tap": "^16.3.4",
+    "typescript": "^4.9.5"
   }
 }

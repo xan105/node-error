@@ -1,1 +1,1 @@
-export function errorLookup(code: number | string, os?: NodeJS.Platform): string[];
+export function errorLookup(code: number | string, range?: string): string | string[];

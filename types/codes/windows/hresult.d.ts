@@ -1,4 +1,4 @@
-export const windowsErrCodesHRESULT: {
+export const HRESULT: {
     197120: string[];
     197121: string[];
     197122: string[];

@@ -168,9 +168,10 @@ Failure: Expecting a string !
     at async Promise.all (index 0)
 ```
 
-### `linuxErrCodes: object`
+### `codes: object`
 
-A list of standard Linux error codes _(1-131)_ with their description as follows:
+A list of standard error codes with their description.<br />
+Errors are listed by their unsigned numerical value as `value:number = [description: string, code: string]`
 
 ```js
 {
@@ -181,60 +182,95 @@ A list of standard Linux error codes _(1-131)_ with their description as follows
 }
 ```
 
-Usage example:
+#### Available error code range are:
 
-`throw new Failure(...linuxErrCodes[2]);`
+ - `linux`
+   
+    Linux error codes 1 to 131.
+   
+ - `windows` 
+ 
+    Windows error codes 1 to 15841.
+   
+ - `hresult` 
+ 
+    HRESULT codes are most commonly encountered in COM programming. Includes common and WMI error codes.
+ 
+ - `ntstatus` 
+ 
+    NTSTATUS values are mostly used like HRESULT but they have different codes.
+    
+ - `win32` 
+ 
+    Windows and hresult error codes merged together since their error code range don't overlap.<br />
+    This is also for backward compatibility with previous version of `errorLookup()`
 
+#### They are also available under their own namespace:
+
+```js
+import { codes } from "@xan105/error"
+console.log(codes.windows);
+
+import { windows } from "@xan105/error/codes"
+console.log(windows);
 ```
+
+#### Usage example:
+
+<details>
+<summary>Linux</summary>
+
+```js
+import { Failure, codes } from "@xan105/error"
+throw new Failure(...codes.linux[2]);
+/*
 Failure [ENOENT]: No such file or directory
     StackTrace...
     .............
     ............. {
   code: 'ENOENT'
 }
+*/
 ```
 
-`throw new Failure(linuxErrCodes[1][0], { code: linuxErrCodes[1][1], info: { foo: "bar" } });`
-
-```
-Failure [EPERM]: Operation not permitted
+```js
+import { Failure, codes } from "@xan105/error"
+const [description, code] = codes.linux[1];
+throw new Failure(description, { code, info: { foo: "bar" } });
+/*
+Failure [EPERM]: Operation not permitted,
     StackTrace...
     .............
     ............. {
   code: 'EPERM',
   info: { foo: 'bar' }
 }
+*/
 ```
 
-### `windowsErrCodes: object`
+</details>
 
-A list of standard Windows error codes _(1-15841)_ with their description as follows:
+<details>
+<summary>Windows</summary>
 
 ```js
-{
-  1: ["Incorrect function", "ERROR_INVALID_FUNCTION"],
-  2: ["The system cannot find the file specified", "ERROR_FILE_NOT_FOUND"],
-  3: ["The system cannot find the path specified", "ERROR_PATH_NOT_FOUND"],
-  ...
-}
-```
-
-Usage example:
-
-`throw new Failure(...windowsErrCodes[2]);`
-
-```
+import { Failure, codes } from "@xan105/error"
+throw new Failure(...codes.windows[2]);
+/*
 Failure [ERROR_FILE_NOT_FOUND]: The system cannot find the file specified
     StackTrace...
     .............
     ............. {
   code: 'ERROR_FILE_NOT_FOUND'
 }
+*/
 ```
 
-`throw new Failure(windowsErrCodes[1][0], { code: windowsErrCodes[1][1], info: { foo: "bar" } });`
-
-```
+```js
+import { Failure, codes } from "@xan105/error"
+const [description, code] = codes.windows[1];
+throw new Failure(description, { code, info: { foo: "bar" } });
+/*
 Failure [ERROR_INVALID_FUNCTION]: Incorrect function
     StackTrace...
     .............
@@ -242,61 +278,39 @@ Failure [ERROR_INVALID_FUNCTION]: Incorrect function
   code: 'ERROR_INVALID_FUNCTION',
   info: { foo: 'bar' }
 }
+*/
 ```
 
-### `windowsErrCodesHRESULT: object`
+</details>
 
-Like `windowsErrCodes` but with `HRESULT`.<br/>
-_HRESULT error codes_ are most commonly encountered in COM programming.<br/>
-Includes common and WMI error codes with their description as follows:
+<details>
+<summary>Windows HRESULT</summary>
+
+Example with error `2147749921 (0x80041021)`:
 
 ```js
-{
-  2147500036: ["Operation aborted", "E_ABORT"],
-  2147500037: ["Unspecified failure", "E_FAIL"],
-  2147549183: ["Unexpected failure", "E_UNEXPECTED"],
-  ...
-}
-```
+import { Failure, codes } from "@xan105/error"
 
-Usage example with error `2147749921 (0x80041021)`:
-
-```js
-const code = new Uint32Array([-2147217375])[0]; //cast signed to unsigned
-throw new Failure(...windowsErrCodesHRESULT[code]);
-```      
-
-```
+const hr = someWin32API(); //received error -2147217375
+const code = new Uint32Array([hr])[0]; //cast signed to unsigned
+throw new Failure(...codes.hresult[code]);
+/*
 Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
     StackTrace...
     .............
     ............. {
   code: 'WBEM_E_INVALID_SYNTAX'
 }
+*/
 ```
 
-```js
-throw new Failure(windowsErrCodes[2147749921][0], { 
-  code: windowsErrCodes[2147749921][1], 
-  info: { foo: "bar" } 
-});
-```
+</details>
 
-```
-Failure [WBEM_E_INVALID_SYNTAX]: Incorrect function
-    StackTrace...
-    .............
-    ............. {
-  code: 'WBEM_E_INVALID_SYNTAX',
-  info: { foo: 'bar' }
-}
-```
-
-### `errorLookup(code: number | string, os?: string = os.platform()): string[]`
+### `errorLookup(code: number | string, range?: string): string[]`
 
 Retrieve information about an error by its numerical status code (or other code).
 
-Return an array of string as [message, code].
+Return an array of string as `[message: string, code: string]`.
 
 You can use it directly with `Failure`:
 
@@ -305,16 +319,19 @@ new Failure(...errorLookup(0x80041021));
 new Failure(...errorLookup(2147749921));
 new Failure(...errorLookup(-2147217375));
 new Failure(...errorLookup("WBEM_E_INVALID_SYNTAX"));
-```
 
-```
+/*
 Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
     StackTrace...
     .............
     ............. {
   code: 'WBEM_E_INVALID_SYNTAX'
 }
+*/
 ```
+
+See `codes` above for available error code range.
+If omitted `linux` is used under Linux and `win32` under Windows.
 
 ### `attempt(fn: unknown, args?: unknown[]):Promise<unknown[]> | unknown[]`
 
