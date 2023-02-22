@@ -43,6 +43,10 @@ if(err) console.error(err); //handle error
 const [ json = {} ] = attempt(JSON.parse, [file]);
 //skip value
 const [, err] = attempt(foo, ["bar"]);
+
+//if you prefer a node:util/promisify like syntax
+import { attemptify } from "@xan105/error";
+const [json] = attemptify(JSON.parse)(file);
 ```
 
 - Windows error lookup with shell32 API (FFI)
@@ -468,7 +472,7 @@ Usage example with node:util/promisify:
 ```js
 import { promisify } from "node:util";
 import { execFile } from "node:child_process";
-import { attempt } from "@xan105/error";
+import { attempt, Failure } from "@xan105/error";
 
 const [ ps, err ] = await attempt(promisify(execFile), ["pwsh", [
   "-NoProfile", 
