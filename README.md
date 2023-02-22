@@ -463,13 +463,38 @@ const [ result, error ] = await attempt(Promise.any, [promises]);
 const [ result, error ] = await attempt(Promise.any.bind(Promise), [promises]);
 ```
 
-node:util/promisify:
+Usage example with node:util/promisify:
 
 ```js
 import { promisify } from "node:util";
 import { execFile } from "node:child_process";
+import { attempt } from "@xan105/error";
 
-const [ ps, err ] = await attempt(promisify(execFile), [pwsh, ["-NoProfile", "-NoLogo"], { windowsHide: true }]);
+const [ ps, err ] = await attempt(promisify(execFile), ["pwsh", [
+  "-NoProfile", 
+  "-NoLogo", 
+  "-Command", 
+  "$PSVersionTable.PSVersion.ToString()"
+], { windowsHide: true }]);
+
 if (err || ps.stderr) throw new Failure(err?.stderr || ps.stderr, "ERR_POWERSHELL");
-return ps;
+console.log(ps.stdout);
 ```
+
+### `attemptify(fn: unknown): (...args: unknown[]) => Promise<unknown[]> | unknown[]`
+
+node:util/promisify style syntax for `attempt()`:
+
+```js
+function double(i){
+  return i * 2;
+}
+
+//Instead of
+const j = attempt(double, [2]);
+
+//You can use
+const j = attemptify(double)(2);
+```
+
+This is a simple wrapper to `attempt()`.
