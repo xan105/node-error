@@ -1,32 +1,33 @@
-import t from "tap";
+import test from "node:test";
+import assert from "node:assert/strict";
 import { Failure } from "../lib/index.js";
 
-t.test("Failure", t => {
+test("Failure", async t => {
   
-  t.test("basic", t => {
+  await test("basic", t => {
   
     try{
       throw new Failure("message");
     }catch(err){
-      t.ok(err instanceof Error);
-      t.ok(err instanceof Failure);
-      t.equal(err.code, undefined);
-      t.equal(err.message, "message");
+      assert.ok(err instanceof Error);
+      assert.ok(err instanceof Failure);
+      assert.equal(err.code, undefined);
+      assert.equal(err.message, "message");
     }
       
     try{
       throw new Failure("message", "code");
     }catch(err){
-      t.ok(err instanceof Error);
-      t.ok(err instanceof Failure);
-      t.equal(err.code, "code");
-      t.equal(err.message, "message");
+      assert.ok(err instanceof Error);
+      assert.ok(err instanceof Failure);
+      assert.equal(err.code, "code");
+      assert.equal(err.message, "message");
     }
   
-  t.end();
+  
   });
   
-  t.test("err code", t => {
+  await test("err code", t => {
   
     const CODES = {
       0: "ERR_UNEXPECTED",
@@ -39,26 +40,26 @@ t.test("Failure", t => {
       try{
         throw new Failure("message", +i);
       }catch(err){
-        t.ok(err instanceof Error);
-        t.ok(err instanceof Failure);
-        t.equal(err.code, code);
-        t.equal(err.message, "message");
+        assert.ok(err instanceof Error);
+        assert.ok(err instanceof Failure);
+        assert.equal(err.code, code);
+        assert.equal(err.message, "message");
       }
       
       try{
         throw new Failure("message", { code: +i });
       }catch(err){
-        t.ok(err instanceof Error);
-        t.ok(err instanceof Failure);
-        t.equal(err.code, code);
-        t.equal(err.message, "message");
+        assert.ok(err instanceof Error);
+        assert.ok(err instanceof Failure);
+        assert.equal(err.code, code);
+        assert.equal(err.message, "message");
       }
     }
     
-  t.end();
+  
   });
   
-  t.test("cause", t => {
+  await test("cause", t => {
 
     try{
       throw new Error("parent error");
@@ -66,12 +67,12 @@ t.test("Failure", t => {
       try{
         throw new Failure("message", { cause: _err });
       }catch(err){
-        t.ok(err instanceof Error);
-        t.ok(err instanceof Failure);
-        t.equal(err.code, undefined);
-        t.equal(err.message, "message");
-        t.ok(err.cause instanceof Error);
-        t.equal(err.cause.message, "parent error");
+        assert.ok(err instanceof Error);
+        assert.ok(err instanceof Failure);
+        assert.equal(err.code, undefined);
+        assert.equal(err.message, "message");
+        assert.ok(err.cause instanceof Error);
+        assert.equal(err.cause.message, "parent error");
       }
     }
     
@@ -81,111 +82,108 @@ t.test("Failure", t => {
       try{
         throw new Failure("message", { cause: _err });
       }catch(err){
-        t.ok(err instanceof Error);
-        t.ok(err instanceof Failure);
-        t.equal(err.code, undefined);
-        t.equal(err.message, "message");
-        t.ok(err.cause instanceof Error);
-        t.equal(err.cause.message, "parent error");
-        t.ok(err.cause instanceof Failure);
-        t.equal(err.cause.code, "code_parent");
+        assert.ok(err instanceof Error);
+        assert.ok(err instanceof Failure);
+        assert.equal(err.code, undefined);
+        assert.equal(err.message, "message");
+        assert.ok(err.cause instanceof Error);
+        assert.equal(err.cause.message, "parent error");
+        assert.ok(err.cause instanceof Failure);
+        assert.equal(err.cause.code, "code_parent");
       }
     }
-   
-  t.end();
+
   });
   
-  t.test("options", t => {
-    t.test("clean stack trace", t => {
+  await test("options", async t => {
+    await test("clean stack trace", t => {
 
       let length = {a: 0, b: 0 };
       
       try{
         throw new Failure("message", { clean: false });
       }catch(err){
-        t.ok(err instanceof Error);
-        t.ok(err instanceof Failure);
-        t.equal(err.code, undefined);
-        t.equal(err.message, "message");
+        assert.ok(err instanceof Error);
+        assert.ok(err instanceof Failure);
+        assert.equal(err.code, undefined);
+        assert.equal(err.message, "message");
         length.a = err.stack.length;
       }
       
       try{
         throw new Failure("message", { clean: true });
       }catch(err){
-        t.ok(err instanceof Error);
-        t.ok(err instanceof Failure);
-        t.equal(err.code, undefined);
-        t.equal(err.message, "message");
+        assert.ok(err instanceof Error);
+        assert.ok(err instanceof Failure);
+        assert.equal(err.code, undefined);
+        assert.equal(err.message, "message");
         length.b = err.stack.length;
       }
      
-      t.ok(length.a > length.b);
+      assert.ok(length.a > length.b);
       
-    t.end();
+    
     });
 
     try{
       throw new Failure("message", { info: {foo: "bar"} });
     }catch(err){
-      t.ok(err instanceof Error);
-      t.ok(err instanceof Failure);
-      t.equal(err.code, undefined);
-      t.equal(err.message, "message");
-      t.same(err.info, {foo: "bar"});
+      assert.ok(err instanceof Error);
+      assert.ok(err instanceof Failure);
+      assert.equal(err.code, undefined);
+      assert.equal(err.message, "message");
+      assert.deepEqual(err.info, {foo: "bar"});
     }
     
     try{
       throw new Failure("message", { info: ["0", 1, 2, "3"] });
     }catch(err){
-      t.ok(err instanceof Error);
-      t.ok(err instanceof Failure);
-      t.equal(err.code, undefined);
-      t.equal(err.message, "message");
-      t.same(err.info, ["0", 1, 2, "3"]);
+      assert.ok(err instanceof Error);
+      assert.ok(err instanceof Failure);
+      assert.equal(err.code, undefined);
+      assert.equal(err.message, "message");
+      assert.deepEqual(err.info, ["0", 1, 2, "3"]);
     }
     
     try{
       throw new Failure("message", { info: "hello world" });
     }catch(err){
-      t.ok(err instanceof Error);
-      t.ok(err instanceof Failure);
-      t.equal(err.code, undefined);
-      t.equal(err.message, "message");
-      t.equal(err.info, "hello world");
+      assert.ok(err instanceof Error);
+      assert.ok(err instanceof Failure);
+      assert.equal(err.code, undefined);
+      assert.equal(err.message, "message");
+      assert.equal(err.info, "hello world");
     }
-    
-   
-  t.end();
+
   });
   
-  t.test("bad usage", t => {
+  await test("bad usage", t => {
   
     try{
       throw new Failure("message", { code: 999 });
     }catch(err){
-      t.ok(err instanceof Error);
-      t.ok(err instanceof Failure);
-      t.equal(err.code, "Error 999");
-      t.equal(err.message, "message");
+      assert.ok(err instanceof Error);
+      assert.ok(err instanceof Failure);
+      assert.equal(err.code, "Error 999");
+      assert.equal(err.message, "message");
     }
     
     try{
       throw new Failure();
     }catch(err){
-      t.ok(err instanceof Error);
-      t.ok(err instanceof Failure);
-      t.equal(err.code, undefined);
-      t.equal(err.message, "An error has occurred");
+      assert.ok(err instanceof Error);
+      assert.ok(err instanceof Failure);
+      assert.equal(err.code, undefined);
+      assert.equal(err.message, "An error has occurred");
     }
     
     try{
       throw new Failure("");
     }catch(err){
-      t.ok(err instanceof Error);
-      t.ok(err instanceof Failure);
-      t.equal(err.code, undefined);
-      t.equal(err.message, "An error has occurred");
+      assert.ok(err instanceof Error);
+      assert.ok(err instanceof Failure);
+      assert.equal(err.code, undefined);
+      assert.equal(err.message, "An error has occurred");
     }
     
     try{
@@ -194,36 +192,33 @@ t.test("Failure", t => {
       try{
         throw new Failure("message", { cause: _err });
       }catch(err){
-        t.ok(err instanceof Error);
-        t.ok(err instanceof Failure);
-        t.equal(err.code, undefined);
-        t.equal(err.message, "message");
-        t.equal(err.cause, undefined);
+        assert.ok(err instanceof Error);
+        assert.ok(err instanceof Failure);
+        assert.equal(err.code, undefined);
+        assert.equal(err.message, "message");
+        assert.equal(err.cause, undefined);
       }
     }
     
     try{
       throw new Failure("message", { cause: "parent message" });
     }catch(err){
-      t.ok(err instanceof Error);
-      t.ok(err instanceof Failure);
-      t.equal(err.code, undefined);
-      t.equal(err.message, "message");
-      t.equal(err.cause, undefined);
+      assert.ok(err instanceof Error);
+      assert.ok(err instanceof Failure);
+      assert.equal(err.code, undefined);
+      assert.equal(err.message, "message");
+      assert.equal(err.cause, undefined);
     }
     
     try{
       throw new Failure("message", { info: 2 });
     }catch(err){
-      t.ok(err instanceof Error);
-      t.ok(err instanceof Failure);
-      t.equal(err.code, undefined);
-      t.equal(err.message, "message");
-      t.equal(err.info, undefined);
+      assert.ok(err instanceof Error);
+      assert.ok(err instanceof Failure);
+      assert.equal(err.code, undefined);
+      assert.equal(err.message, "message");
+      assert.equal(err.info, undefined);
     }
     
-  t.end();
   });
-
-t.end();
 });
