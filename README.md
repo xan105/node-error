@@ -314,7 +314,7 @@ Failure [WBEM_E_INVALID_SYNTAX]: Query is syntactically not valid
 
 Retrieve information about an error by its numerical status code (or other code).
 
-Return an array of string as `[message: string, code: string]`.
+Return an array of string as `[message: string, code?: string]`.
 
 You can use it directly with `Failure`:
 
