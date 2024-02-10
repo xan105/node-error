@@ -497,7 +497,7 @@ Similar to the Rust `match Result<T, E>` pattern:
 
 Success is handled by the `Ok()` function and failure by the `Err()` function respectively.
 
-```
+```js
 const greetings = (name) => `hello ${name}`;
 
 const message = match(greetings, ["Xan"], {
@@ -506,10 +506,10 @@ const message = match(greetings, ["Xan"], {
 });
 ```
 
-The `Ok()` function is expected to return the value the `match()` function shall return for value assignement.<br />
+The `Ok()` function is expected to return the value the `match()` function shall return for value assignment.<br />
 💡 `Ok()` and `Err()` can both be omitted.
 
-```
+```js
 const greetings = (name) => `hello ${name}`;
 
 const message = match(greetings, ["Xan"], {
@@ -526,7 +526,7 @@ const file = await match(fs.Promises.readFile, [filePath]);
 const json = match(JSON.parse, [file]);
 ```
 
-In case of error, If `Err()` returns a value it will be used for value assignement.<br />
+In case of error, If `Err()` returns a value it will be used for value assignment.<br />
 Use this to ignore an error and set a default value:
 
 ```js
@@ -535,9 +535,11 @@ const json = match(JSON.parse, [file], {
 });
 ```
 
-⚠️ NB: This function is similar to the above export `attempt()` and therefore inherits the same remarks when loosing `this` context (_see above_).
+⚠️ NB: If you get an error like:
 
 ```
 TypeError: x called on non-object
 TypeError: Illegal invocation
 ```
+
+This function is similar to the above export `attempt()` and therefore inherits the same remarks when loosing `this` context (_see above_).
