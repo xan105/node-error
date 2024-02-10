@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { attempt } from "../lib/index.js";
 
-test("fn as a Promise", async t => {
-  await test("on success", async t => {
+test("[attempt] fn as a Promise", async() => {
+  await test("on success", async() => {
     let res = await attempt( Promise.resolve("value") );
     assert.equal(res[0], "value");
     assert.equal(res[1], undefined);
@@ -15,7 +15,7 @@ test("fn as a Promise", async t => {
 
   
   });
-  await test("on failure", async t => {
+  await test("on failure", async() => {
     let res = await attempt( Promise.reject(new Error("error")) );
     assert.equal(res[0], undefined);
     assert.ok(res[1] instanceof Error);
@@ -31,8 +31,8 @@ test("fn as a Promise", async t => {
 });
 
 
-test("fn as a function that returns a Promise", async t => {
-  await test("on success", async t => {
+test("[attempt] fn as a function that returns a Promise", async() => {
+  await test("on success", async() => {
   
     const fn = function(x){
       return new Promise((resolve) => {
@@ -45,7 +45,7 @@ test("fn as a function that returns a Promise", async t => {
     assert.equal(error, undefined);
 
   });
-  await test("on failure", async t => {
+  await test("on failure", async() => {
     
     const fn = function(x){
       return new Promise((resolve, reject) => {
@@ -61,8 +61,8 @@ test("fn as a function that returns a Promise", async t => {
   });
 });
 
-test("fn as an async function", async t => {
-  await test("on success", async t => {
+test("[attempt] fn as an async function", async() => {
+  await test("on success", async() => {
   
     const fn = async function(x){ return x };
     let [ result, error ] = await attempt(fn, ["value"]);
@@ -71,7 +71,7 @@ test("fn as an async function", async t => {
     assert.equal(error, undefined);
 
   });
-  await test("on failure", async t => {
+  await test("on failure", async() => {
     
     const fn = async function(x){ throw new Error("error") };
     let [ result, error ] = await attempt(fn, ["value"]);
@@ -83,8 +83,8 @@ test("fn as an async function", async t => {
   });
 });
 
-test("fn as a function", async t => {
-  await test("on success", t => {
+test("[attempt] fn as a function", async() => {
+  await test("on success", () => {
   
     const fn = function(x){ return x };
     let [ result, error ] = attempt(fn, ["value"]);
@@ -93,7 +93,7 @@ test("fn as a function", async t => {
     assert.equal(error, undefined);
 
   });
-  await test("on failure", t => {
+  await test("on failure", () => {
     
     const fn = function(x){ throw new Error("error") };
     let [ result, error ] = attempt(fn, ["value"]);
@@ -105,8 +105,8 @@ test("fn as a function", async t => {
   });
 });
 
-test("fn as an anonymous function", async t => {
-  await test("on success", t => {
+test("[attempt] fn as an anonymous function", async() => {
+  await test("on success", () => {
     let res = attempt( ()=> "value" );
     assert.equal(res[0], "value");
     assert.equal(res[1], undefined);
@@ -116,7 +116,7 @@ test("fn as an anonymous function", async t => {
     assert.equal(res[1], undefined);
 
   });
-  await test("on failure", t => {
+  await test("on failure", () => {
     const [ result, error ] = attempt( ()=> { throw new Error("error") } );
     
     assert.equal(result, undefined);
@@ -126,15 +126,15 @@ test("fn as an anonymous function", async t => {
   });
 });
 
-test("fn as an anonymous async function", async t => {
-  await test("on success", async t => {
+test("[attempt] fn as an anonymous async function", async() => {
+  await test("on success", async() => {
     const [ result, error ] = await attempt( async ()=> "value" );
     
     assert.equal(result, "value");
     assert.equal(error, undefined);
 
   });
-  await test("on failure", async t => {
+  await test("on failure", async() => {
     const [ result, error ] = await attempt( async ()=> { throw new Error("error") } );
     
     assert.equal(result, undefined);
@@ -144,8 +144,8 @@ test("fn as an anonymous async function", async t => {
   });
 });
 
-test("Examples:", async t => {
-  await test("Promise static method", async t => {
+test("[attempt] Examples:", async() => {
+  await test("Promise static method", async() => {
   
     const promise1 = Promise.reject(0);
     const promise2 = new Promise((resolve) => setTimeout(resolve, 100, "quick"));
@@ -161,7 +161,7 @@ test("Examples:", async t => {
     assert.equal(res[1], undefined);    
 
   });
-  await test("JSON parsing fail use default value", t => {
+  await test("JSON parsing fail use default value", () => {
     
     const string = `{0\"name":"John","age":30,"city":"New York"}`;
     const [ json = {} ] = attempt(JSON.parse, [string]);
@@ -169,7 +169,7 @@ test("Examples:", async t => {
     assert.deepEqual(json, {});
 
   });
-  await test("JSON parsing wrap in anonymous function", t => {
+  await test("JSON parsing wrap in anonymous function", () => {
     
     const string = `{"name":"John","age":30,"city":"New York"}`;
     const [ json ] = attempt(()=> JSON.parse(string) );
@@ -181,7 +181,7 @@ test("Examples:", async t => {
     assert.deepEqual(string, json2string);
 
   });
-  await test("skipping value", t => {
+  await test("skipping value", () => {
     
     const [, error] = attempt(()=> { throw new Error("error") });
     assert.ok(error instanceof Error);
@@ -190,8 +190,8 @@ test("Examples:", async t => {
   });
 });
 
-test("Bad usage:", async t => {
-  await test("If not function/promise attempt() returns value as is due to its non-fail approach", t => {
+test("[attempt] Bad usage:", async() => {
+  await test("If not function/promise attempt() returns value as is due to its non-fail approach", () => {
     
     assert.deepEqual(attempt(null), [null, undefined]);
     assert.deepEqual(attempt("string"), ["string", undefined]);
@@ -201,7 +201,7 @@ test("Bad usage:", async t => {
     
   
   });
-  await test("Opt args param is not an array", t => {
+  await test("Opt args param is not an array", () => {
     
     const sum = (x) => x;
     const [ result, error ] = attempt(sum, "oops");

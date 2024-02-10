@@ -7,6 +7,7 @@ Error handling tools:
 - Linux/Windows standard error codes and their description
 - Error lookup: retrieve description associated to status code (or other code)
 - GoLang style error handling: return value instead of throwing
+- Rust style error handling: `match Result<T, E>` pattern
 
 📦 Scoped `@xan105` packages are for my own personal use but feel free to use them.
 
@@ -49,6 +50,17 @@ import { attemptify } from "@xan105/error";
 const [json] = attemptify(JSON.parse)(file);
 ```
 
+- Rust style error (`match Result<T, E>` pattern)
+
+```js
+import { match } from "@xan105/error";
+import { readFile } from "node:fs/promises";
+
+const file = await match(readFile, [filePath], {
+  Err: (err) => { console.error(err); } //handle error
+});
+```
+
 - Windows error lookup with shell32 API (FFI)
 
 ```js
@@ -72,37 +84,12 @@ StackTrace...
 }
 ```
 
-Install / Runtime
-=================
-
-### 📦 Package manager
+Install
+=======
 
 ```
 npm install @xan105/error
 ```
-
-<details><summary>Compatibility</summary>
-
-- Node ✔️
-- Deno ✔️ `--compat --unstable`
-
-</details>
-
-### 🌐 CDN / HTTPS Bundle
-
-```
-import ... from "https://esm.sh/@xan105/error"
-```
-
-Please see https://esm.sh/ for more details.
-
-<details><summary>Compatibility</summary>
-
-- Node ✔️ `--experimental-network-imports`
-- Deno ✔️
-- Browser ✔️
-
-</details>
 
 API
 ===
@@ -502,3 +489,55 @@ const j = attemptify(double)(2);
 ```
 
 This is a simple wrapper to `attempt()`.
+
+### `match(fn: unknown, args: unknown[], cb?: { Ok?: function, Err?: function }):Promise<unknown> | unknown`
+
+This is a try/catch wrapper to change how an error is handled.<br />
+Similar to the Rust `match Result<T, E>` pattern:
+
+Success is handled by the `Ok()` function and failure by the `Err()` function respectively.
+
+```
+const greetings = (name) => `hello ${name}`;
+
+const message = match(greetings, ["Xan"], {
+  Ok: (value) => value,
+  Err: (err) => { console.log(err) }
+});
+```
+
+The `Ok()` function is expected to return the value the `match()` function shall return for value assignement.<br />
+💡 `Ok()` and `Err()` can both be omitted.
+
+```
+const greetings = (name) => `hello ${name}`;
+
+const message = match(greetings, ["Xan"], {
+  Err: (err) => { console.log(err) }
+});
+```
+
+If `fn` is a promise then this function will behave like one:
+
+```js
+//Promise
+const file = await match(fs.Promises.readFile, [filePath]);
+//Sync
+const json = match(JSON.parse, [file]);
+```
+
+In case of error, If `Err()` returns a value it will be used for value assignement.<br />
+Use this to ignore an error and set a default value:
+
+```js
+const json = match(JSON.parse, [file], {
+  Err: ()=> { return {} }
+});
+```
+
+⚠️ NB: This function is similar to the above export `attempt()` and therefore inherits the same remarks when loosing `this` context (_see above_).
+
+```
+TypeError: x called on non-object
+TypeError: Illegal invocation
+```
