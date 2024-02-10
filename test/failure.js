@@ -2,9 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { Failure } from "../lib/index.js";
 
-test("Failure", async t => {
+test("Failure", async () => {
   
-  await test("basic", t => {
+  await test("basic", () => {
   
     try{
       throw new Failure("message");
@@ -27,7 +27,7 @@ test("Failure", async t => {
   
   });
   
-  await test("err code", t => {
+  await test("err code", () => {
   
     const CODES = {
       0: "ERR_UNEXPECTED",
@@ -59,7 +59,7 @@ test("Failure", async t => {
   
   });
   
-  await test("cause", t => {
+  await test("cause", () => {
 
     try{
       throw new Error("parent error");
@@ -95,8 +95,8 @@ test("Failure", async t => {
 
   });
   
-  await test("options", async t => {
-    await test("clean stack trace", t => {
+  await test("options", async () => {
+    await test("clean stack trace", () => {
 
       let length = {a: 0, b: 0 };
       
@@ -157,7 +157,7 @@ test("Failure", async t => {
 
   });
   
-  await test("bad usage", t => {
+  await test("bad usage", () => {
   
     try{
       throw new Failure("message", { code: 999 });
