@@ -420,6 +420,28 @@ const [json] = attempt(()=> JSON.stringify(JSON.parse(string)) );
   
   💡 _undefined_ is used to represent the lack/nonexistence of value because destructuring default value assignment triggers only with _undefined_.
 
+Usage example with node:util/promisify:
+
+```js
+import { promisify } from "node:util";
+import { execFile } from "node:child_process";
+import { attempt, Failure } from "@xan105/error";
+
+const [ ps, err ] = await attempt(promisify(execFile), ["pwsh", [
+  "-NoProfile", 
+  "-NoLogo", 
+  "-Command", 
+  "$PSVersionTable.PSVersion.ToString()"
+], { windowsHide: true }]);
+
+if (err || ps.stderr) throw new Failure(err?.stderr || ps.stderr, "ERR_POWERSHELL");
+console.log(ps.stdout);
+```
+
+#### Special case
+
+##### Loosing "this" context
+
 ⚠️ NB: If you get an error like:
 ```
 TypeError: x called on non-object
@@ -454,22 +476,38 @@ const [ result, error ] = await attempt(Promise.any, [promises]);
 const [ result, error ] = await attempt(Promise.any.bind(Promise), [promises]);
 ```
 
-Usage example with node:util/promisify:
+##### Computed properties (Getter/Setter)
+
+The actual function behind the Getter/Setter will be called when that property is looked up.
+Therefore if there was any error it would throw before `attempt()` could catch it.
 
 ```js
-import { promisify } from "node:util";
-import { execFile } from "node:child_process";
-import { attempt, Failure } from "@xan105/error";
+class Foo {
+  constructor(){}
+  
+  get bar(){
+    throw new Error("error");
+  }
+}
 
-const [ ps, err ] = await attempt(promisify(execFile), ["pwsh", [
-  "-NoProfile", 
-  "-NoLogo", 
-  "-Command", 
-  "$PSVersionTable.PSVersion.ToString()"
-], { windowsHide: true }]);
+const foo = new Foo();
+const [, err] = attempt(foo.bar); 
+```
 
-if (err || ps.stderr) throw new Failure(err?.stderr || ps.stderr, "ERR_POWERSHELL");
-console.log(ps.stdout);
+To catch it you need to pass the actual function behind the Getter/Setter.
+
+```js
+class Foo {
+  constructor(){}
+  
+  get bar(){
+    throw new Error("error");
+  }
+}
+
+const foo = new Foo();
+const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(foo), "bar");
+const [, err] = attempt(descriptor?.["get"]);
 ```
 
 ### `attemptify(fn: unknown): (...args: unknown[]) => Promise<unknown[]> | unknown[]`
@@ -535,11 +573,6 @@ const json = match(JSON.parse, [file], {
 });
 ```
 
-⚠️ NB: If you get an error like:
+#### Special case
 
-```
-TypeError: x called on non-object
-TypeError: Illegal invocation
-```
-
-This function is similar to the above export `attempt()` and therefore inherits the same remarks when loosing `this` context (_see above_).
+⚠️ This function is similar to the above export `attempt()` and therefore inherits the same remarks (_see above_).
