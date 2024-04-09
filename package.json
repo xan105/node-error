@@ -1,7 +1,7 @@
 {
   "name": "@xan105/error",
   "description": "Error handling tools",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "type": "module",
   "exports": {
     ".": {
@@ -65,10 +65,10 @@
     }
   ],
   "devDependencies": {
-    "@types/node": "^20.11.17",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "eslint": "^8.56.0",
-    "typescript": "^5.3.3"
+    "@types/node": "^20.12.5",
+    "@typescript-eslint/eslint-plugin": "^7.6.0",
+    "@typescript-eslint/parser": "^7.6.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.4"
   }
 }
