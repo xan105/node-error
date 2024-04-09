@@ -1,1 +1,1 @@
-export function match(fn: unknown, args: unknown[], cb?: { Ok?: function, Err?: function }): Promise<unknown> | unknown;
+export function match(fn: unknown, args: unknown[], cb?: { Ok?: (v: unknown) => unknown, Err?: () => void }): Promise<unknown> | unknown;
