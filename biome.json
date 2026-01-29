@@ -1,0 +1,22 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.3.13/schema.json",
+	"files": {
+		"includes": ["**/lib/**", "**/types/**", "!**/node_modules"]
+	},
+	"formatter": {
+		"enabled": false
+	},
+	"assist": { "actions": { "source": { "organizeImports": "off" } } },
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"style": {
+				"noParameterAssign": "warn"
+			},
+			"complexity": {
+				"noBannedTypes": "warn"
+			}
+		}
+	}
+}
