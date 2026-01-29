@@ -106,10 +106,9 @@ This extends the regular `Error` constructor.
 |option|default|description|
 |------|-------|-----------|
 |code|none|optional custom error code (see below for details)|
-|cause|none|parent error if any|
+|cause|none|additional details about the error or the parent error|
 |clean|true|remove unhelpful internal stack trace entries|
 |filter|none|additional string[] of path(s) to filter when using clean| 
-|info|none|an additional object/array/string to give more details about the error|
 
 `code` (if any) is expected to be a string if it's an integer then the following will be used instead:
 
@@ -136,7 +135,7 @@ Failure [ERR_INVALID_ARG]: Expecting a string !
 }
 ```
 
-`new Failure("Expecting a string !", { code: 1, info: { foo: "bar" } });`
+`new Failure("Expecting a string !", { code: 1, cause: { foo: "bar" } });`
 
 ```
 Failure [ERR_INVALID_ARG]: Expecting a string !
@@ -147,7 +146,7 @@ Failure [ERR_INVALID_ARG]: Expecting a string !
     at async loadESM (node:internal/process/esm_loader:88:5)
     at async handleMainPromise (node:internal/modules/run_main:65:12) {
   code: 'ERR_INVALID_ARG',
-  info: { foo: 'bar' }
+  cause: { foo: 'bar' }
 }
 ```
 
@@ -227,14 +226,14 @@ Failure [ENOENT]: No such file or directory
 ```js
 import { Failure, codes } from "@xan105/error"
 const [description, code] = codes.linux[1];
-throw new Failure(description, { code, info: { foo: "bar" } });
+throw new Failure(description, { code, cause: { foo: "bar" } });
 /*
 Failure [EPERM]: Operation not permitted,
     StackTrace...
     .............
     ............. {
   code: 'EPERM',
-  info: { foo: 'bar' }
+  cause: { foo: 'bar' }
 }
 */
 ```
@@ -260,14 +259,14 @@ Failure [ERROR_FILE_NOT_FOUND]: The system cannot find the file specified
 ```js
 import { Failure, codes } from "@xan105/error"
 const [description, code] = codes.windows[1];
-throw new Failure(description, { code, info: { foo: "bar" } });
+throw new Failure(description, { code, cause: { foo: "bar" } });
 /*
 Failure [ERROR_INVALID_FUNCTION]: Incorrect function
     StackTrace...
     .............
     ............. {
   code: 'ERROR_INVALID_FUNCTION',
-  info: { foo: 'bar' }
+  cause: { foo: 'bar' }
 }
 */
 ```

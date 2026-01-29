@@ -126,33 +126,33 @@ test("Failure", async () => {
     });
 
     try{
-      throw new Failure("message", { info: {foo: "bar"} });
+      throw new Failure("message", { cause: {foo: "bar"} });
     }catch(err){
       assert.ok(err instanceof Error);
       assert.ok(err instanceof Failure);
       assert.equal(err.code, undefined);
       assert.equal(err.message, "message");
-      assert.deepEqual(err.info, {foo: "bar"});
+      assert.deepEqual(err.cause, {foo: "bar"});
     }
     
     try{
-      throw new Failure("message", { info: ["0", 1, 2, "3"] });
+      throw new Failure("message", { cause: ["0", 1, 2, "3"] });
     }catch(err){
       assert.ok(err instanceof Error);
       assert.ok(err instanceof Failure);
       assert.equal(err.code, undefined);
       assert.equal(err.message, "message");
-      assert.deepEqual(err.info, ["0", 1, 2, "3"]);
+      assert.deepEqual(err.cause, ["0", 1, 2, "3"]);
     }
     
     try{
-      throw new Failure("message", { info: "hello world" });
+      throw new Failure("message", { cause: "hello world" });
     }catch(err){
       assert.ok(err instanceof Error);
       assert.ok(err instanceof Failure);
       assert.equal(err.code, undefined);
       assert.equal(err.message, "message");
-      assert.equal(err.info, "hello world");
+      assert.equal(err.cause, "hello world");
     }
 
   });
@@ -196,7 +196,7 @@ test("Failure", async () => {
         assert.ok(err instanceof Failure);
         assert.equal(err.code, undefined);
         assert.equal(err.message, "message");
-        assert.equal(err.cause, undefined);
+        assert.deepEqual(err.cause, _err);
       }
     }
     
@@ -207,17 +207,17 @@ test("Failure", async () => {
       assert.ok(err instanceof Failure);
       assert.equal(err.code, undefined);
       assert.equal(err.message, "message");
-      assert.equal(err.cause, undefined);
+      assert.equal(err.cause, "parent message");
     }
     
     try{
-      throw new Failure("message", { info: 2 });
+      throw new Failure("message", { cause: 2 });
     }catch(err){
       assert.ok(err instanceof Error);
       assert.ok(err instanceof Failure);
       assert.equal(err.code, undefined);
       assert.equal(err.message, "message");
-      assert.equal(err.info, undefined);
+      assert.equal(err.cause, 2);
     }
     
   });

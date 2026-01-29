@@ -1,14 +1,13 @@
 declare interface Option {
   code?: string | number | null,
-  cause?: object | null,
+  cause?: unknown,
   clean?: boolean,
-  filter?: string[],
-  info?: string | object | null
+  filter?: string[]
 }
 
 export class Failure extends Error {
-    constructor(message: string | object, option?: string | number | Option);
-    code: string | number | null;
-    info: string | object | null;
-    stack: string | undefined;
+  constructor(message: string | object, option?: string | number | Option);
+  code: string | number | null;
+  cause: unknown;
+  stack: string | undefined;
 }
